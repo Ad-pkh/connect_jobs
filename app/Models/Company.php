@@ -14,14 +14,16 @@ class Company extends Model
     'description',
     'location',
     'contact',
-    'link'
+    'link',
+    'recruiter_id'
 
   ];
 
-  public function user(): BelongsTo
+  public function recruiter(): BelongsTo
   {
-    return $this->belongsTo(User::class);
+    return $this->belongsTo(User::class, 'recruiter_id');
   }
+
 
   public function careers(): HasMany
   {

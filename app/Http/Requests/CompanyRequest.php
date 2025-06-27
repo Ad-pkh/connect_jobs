@@ -24,9 +24,9 @@ class CompanyRequest extends FormRequest
         return [
             'name' => 'string|min:2|max:25',
             'description' => 'string|min:2',
-            'location' => 'string|min:2|max:150',          
+            'location' => 'string|min:2|max:150',
             'contact' => 'string|min:2|max:150',
-            'link'=>'string|max:150',
+            'link' => 'string|max:150',
         ];
     }
 }

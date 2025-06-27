@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CareerApplicationRequest extends FormRequest
+class RecruiterStatusUpdate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class CareerApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'resume' => 'required|file|mimes:pdf,doc,docx|max:2048',
+        'status' => 'required|in:pending,active',
         ];
     }
 }

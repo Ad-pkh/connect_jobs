@@ -54,7 +54,7 @@ class Email extends Mailable implements ShouldQueue
     public function attachments(): array
     {
         return [
-            // Example: attach a file
+            //  attach a file
             // Attachment::fromPath(storage_path('app/public/example.pdf')),
         ];
     }

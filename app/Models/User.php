@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -27,7 +28,8 @@ class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
         'role',
         'address',
         'phone',
-        'profile'
+        'profile',
+        'status'
 
     ];
 
@@ -60,8 +62,13 @@ class User extends Authenticatable implements CanResetPassword, MustVerifyEmail
         return $this->hasMany(Career::class, 'created_by');
     }
 
-    public function companies(): HasMany
+    public function company(): HasOne
     {
-        return $this->hasMany(Company::class);
+        return $this->hasOne(Company::class, 'recruiter_id');
+    }
+
+    public function careerApplications(): HasMany
+    {
+        return $this->hasMany(CareerApplication::class);
     }
 }

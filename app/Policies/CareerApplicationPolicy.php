@@ -17,7 +17,6 @@ class CareerApplicationPolicy
     }
     public function updatestatus(User $user, CareerApplication $application): bool
     {
-        $user = Auth::user();
         // Only recruiters who created the career or admin can change status
         $isOwnerRecruiter = $user->role === 'recruiter' && $user->id === $application->career->created_by;
         $isAdmin = $user->role === 'admin';

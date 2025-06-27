@@ -1,27 +1,8 @@
 <?php
 
-// namespace App\Http\Controllers;
-
-// use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Facades\Storage;
-
-// class FileController extends Controller
-// {
-//     public function store(Request $request)
-//     {
-//         $user=Auth::user()->name;
-//         // dd($user);
-//         $file = $request->file('docs');
-//         // dd($file);
-//         $location=Storage::disk('local')->putFile($user, $file);
-//         return $this->success($location, "file Uploaded successfully");
-//     }
-// }
-
-
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,18 +26,50 @@ class FileController extends Controller
         $user = Auth::user();
         $file = $request->file('docs');
 
-        // Optional: sanitize filename or generate UUID for privacy
-        $path = Storage::disk('local')->putFile("uploads/{$user->name}", $file);
-
-        //for public
-
-        // $path = $file->store("uploads/{$user->name}", 'public');
-        // $url = Storage::url($path);
-
+        //  filename or generate UUID for privacy
+        $path = Storage::disk('public')->putFile("resume/{$user->name}", $file);
+        //also need to check if user storedd previously or not
 
         return $this->success([
             'path' => $path,
             'filename' => $file->getClientOriginalName()
         ], "File uploaded successfully");
     }
+    // public function getFile($id)
+    // {
+    //     $user = User::find($id)->name;
+    //     // dd($user);
+    //     $path = storage_path("app/user/file/{$user}");
+        
+    //     if (!$path) {
+    //         return $this->error("file not found",404);
+    //     }
+    //     // dd($path);
+
+    //     return $this->success($path,"file fetched successfully"); 
+    // }
+    public function getFile($id)
+{
+    $user = User::findOrFail($id)->name;
+    $path ="resume/{$user}";
+    // file exists in storage
+    $files = Storage::disk('public')->files($path);
+    // dd($files);
+
+    if (empty($files)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'No resume file found for this user.'
+        ], 404);
+    }
+
+    $resumePath = $files[0];
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Resume found',
+        'data' => asset("storage/{$resumePath}") 
+    ]);
+}
+
 }

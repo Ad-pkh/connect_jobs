@@ -87,22 +87,26 @@ class SessionController extends Controller
     public function store(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
+        $credentials['status'] = 'active';
         if (!Auth::attempt($credentials)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid credentials',
+                'message' => 'Invalid credentials ',
             ], 403);
         }
 
         $user = Auth::user();
+
         $token = $user->createToken('login');
 
         return response()->json([
             'success' => true,
             'message' => 'User logged in successfully',
             'access_token' => $token->accessToken,
-            'token_type' => 'Bearer',
+            'role' => $user->role,
+            'id' => $user->id,
+            'company' => $user->company ? $user->company->id : null,
+
         ]);
     }
 
@@ -159,12 +163,25 @@ class SessionController extends Controller
             }
         );
 
+        // dd($status);
         if ($status === Password::PASSWORD_RESET) {
             return response()->json(['message' => 'Password reset successful.']);
         }
+        if ($status === Password::INVALID_TOKEN) {
+            return response()->json(['message' => 'The reset token is invalid or has expired.'], 422);
+        }
+        return response()->json(['message' => __($status)], 422);
 
-        throw ValidationException::withMessages([
-            'email' => [__($status)],
+        // throw ValidationException::withMessages([
+        //     'email' => [__($status),422],
+        // ]);
+    }
+    public function findUser()
+    {
+        $user = Auth::user();
+        return response()->json([
+            "message" => "User fetched successfully",
+            "data" => $user
         ]);
     }
 }

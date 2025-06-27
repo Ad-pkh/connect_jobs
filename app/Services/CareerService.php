@@ -3,66 +3,9 @@
 namespace App\Services;
 
 use App\Models\career;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
-
-// class CareerService
-// {
-
-//     public function show(): Collection
-//     {
-//         $careers = career::all();
-//         return $careers;
-//     }
-//     public function create(array $data): career
-//     {
-//         $career = career::create($data);
-//         return $career;
-//     }
-
-//     public function findbyId(string $id): career
-//     {
-//         $career = career::findOrFail($id);
-//         return $career;
-//     }
-
-//     public function update(int $id, array $data): career
-//     {
-//         $career = career::findOrFail($id);
-//         $career->update($data);
-//         return $career;
-//     }
-
-//     public function delete(string $id): career|null
-//     {
-//         $career = career::find($id);
-//         if ($career) {
-
-//             $career->destroy($id);
-//         }
-//         return $career;
-//     }
-//     public function filter(?array $salary, ?string $worktype, ?string $role, ?string $location)
-//     {
-//         // instead of writing if does we have better option
-//         $query = Career::query();
-
-//         if ($role) {
-//             $query->where('role', $role);
-//         }
-//         if ($salary) {
-//             $query->whereBetween('salary', [$salary[0], $salary[1]]);
-//         }
-//         if ($worktype) {
-//             $query->where('worktype', $worktype);
-//         }
-//         if ($location) {
-//             $query->where('location', $location);
-//         }
-
-//         return $query->get();
-//     }
-
-// }
+use Illuminate\Support\Facades\Auth;
 
 class CareerService
 {
@@ -89,7 +32,7 @@ class CareerService
         return $career;
     }
 
-    public function delete(string $id): ?Career
+    public function delete(string $id): Career
     {
         $career = Career::find($id);
 
@@ -121,5 +64,19 @@ class CareerService
         }
 
         return $query->get();
+    }
+    public function mycareer()
+    {
+        $user = Auth::user();
+        $career = $user->careers;
+        // dd($career);
+        return $career;
+    }
+    public function candidatesByCareer(string $careerId)
+    {
+        $career = Career::with('applications.user')->findOrFail($careerId);
+        $candidates = $career->applications;
+
+        return $candidates;
     }
 }

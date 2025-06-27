@@ -15,17 +15,13 @@ class CareerApplication extends Model
         'resume',
     ];
 
-    /**
-     * The applicant (job seeker).
-     */
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * The job/career being applied to.
-     */
+
     public function career(): BelongsTo
     {
         return $this->belongsTo(Career::class);

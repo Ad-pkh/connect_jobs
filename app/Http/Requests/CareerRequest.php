@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CareerRequest extends FormRequest
 {
@@ -28,8 +30,8 @@ class CareerRequest extends FormRequest
             'location' => 'string|min:2|max:150',
             'salary' => 'numeric|min:100',
             'role' => 'string|min:2',
-            'worktype'=>'string|in:onsite,hybrid,remote',
-            'status'=>'string|in:publish,unpublish'
+            'worktype' => 'string|in:onsite,hybrid,remote',
+            'status' => 'string|in:publish,unpublish'
         ];
 
         if ($this->isMethod('post')) {
@@ -43,5 +45,13 @@ class CareerRequest extends FormRequest
         }
 
         return $rules;
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success' => false,
+            'message' => 'Validation errors',
+            'errors' => $validator->errors(),
+        ], 422));
     }
 }

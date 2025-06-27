@@ -21,14 +21,14 @@ class ForgetPassword extends FormRequest
      */
     public function rules(): array
     {
-         return [
+        return [
             'email' => 'required|email|exists:users,email',
         ];
     }
-     public function messages(): array
+    public function messages(): array
     {
         return [
-            'email.exists' => 'We couldn’t find a user with that email address.',
+            'email.exists' => "We couldn't find a user with that email address.",
         ];
     }
 }

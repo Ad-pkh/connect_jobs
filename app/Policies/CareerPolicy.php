@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
 class CareerPolicy
-{ /**
+{
+    /**
      * Only employers and admins can create job listings.
      */
     public function create(User $user): bool
@@ -40,7 +41,7 @@ class CareerPolicy
     }
 
     /**
-     * Anyone can view jobs (optional — default to true).
+     * Anyone can view jobs .
      */
     public function view(User $user, Career $career): bool
     {
@@ -52,7 +53,6 @@ class CareerPolicy
      */
     public function filter(User $user): bool
     {
-        // return in_array($user->role, ['admin', 'employer']);
         return true;
     }
 }

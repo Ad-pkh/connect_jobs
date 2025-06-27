@@ -22,7 +22,7 @@ class CareerApplicationUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'userId'=>'required|string',
+            'userId' => 'required|string',
             'status' => 'required|string|in:pending,interview,accepted,rejected',
 
         ];

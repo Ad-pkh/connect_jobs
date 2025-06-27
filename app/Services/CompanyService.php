@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Company;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyService
 {
@@ -14,6 +15,7 @@ class CompanyService
 
     public function create(array $data): Company
     {
+        $data['recruiter_id'] = Auth::user()->id;
         return Company::create($data);
     }
 

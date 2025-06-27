@@ -31,8 +31,7 @@ class Career extends Model
     return $this->belongsTo(Company::class);
   }
   public function applications(): HasMany
-{
+  {
     return $this->hasMany(CareerApplication::class);
-}
-
+  }
 }
